@@ -7,7 +7,11 @@ const app = express();
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
-const db = mongoose.connect('mongodb://localhost/rest-library');
+if (process.env.ENV === 'Test ') {
+  const db = mongoose.connect('mongodb://localhost/rest-library-test');
+} else {
+  const db = mongoose.connect('mongodb://localhost/rest-library');
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -19,6 +23,11 @@ app.get('/', (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, (() => {
+
+app.server = app.listen(port, (() => {
   console.log(`Running on port ${port}`);
 }));
+
+
+
+export { app as default };
